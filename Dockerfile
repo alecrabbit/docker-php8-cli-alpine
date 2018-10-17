@@ -153,6 +153,7 @@ COPY ./aliases/* /scripts/aliases/
 COPY ./keep-alive.sh /scripts/keep-alive.sh
 COPY ./fpm-entrypoint.sh /fpm-entrypoint.sh
 COPY ./etc/php/php-dev.ini /usr/local/etc/php/php.ini
+COPY ./etc/php/php-fpm.conf /usr/local/etc/php-fpm.conf
 
 WORKDIR /var/www
 ENTRYPOINT []
