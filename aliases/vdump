@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-php "./vendor/bin/var-dump-server" "$@"
+var-dump-server "$@"

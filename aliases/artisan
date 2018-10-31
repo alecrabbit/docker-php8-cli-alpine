@@ -6,7 +6,5 @@ if [ -e "$APP_DIR/artisan" ]
 then
     php "$APP_DIR/artisan" "$@"
 else
-    echo "not laravel"
+    echo "Not Laravel. There is no artisan command."
 fi
-
-

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+APP_DIR="${APP_DIR:-/var/www}";
+FILE="$APP_DIR/vendor/bin/var-dump-server";
+
+if [ -e $FILE ]
+then
+  php $FILE "$@"
+else
+  echo "It seems like var-dump-server is not installed."
+fi
