@@ -6,7 +6,6 @@ ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \
 ENV COMPOSER_VERSION 1.7.2
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ENV PHP_REDIS_VERSION 4.1.1
-ENV PHP_XDEBUG_VERSION 2.6.0
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -112,7 +111,6 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     # For phpunit coverage
-    && pecl install xdebug-${PHP_XDEBUG_VERSION} \
     && git clone --branch ${PHP_REDIS_VERSION} https://github.com/phpredis/phpredis /tmp/phpredis \
         && cd /tmp/phpredis \
         && phpize  \
