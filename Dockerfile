@@ -46,6 +46,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
     libintl gettext-dev libxslt \
     # for event extension
     libevent-dev \
+    # for gmp
+    gmp gmp-dev \
     # for imagick extension
     imagemagick-dev \
     # etc
@@ -63,6 +65,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
         --with-png-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-configure bcmath --enable-bcmath \
+    && docker-php-ext-configure gmp --enable-gmp \
     && docker-php-ext-configure intl --enable-intl \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-configure mysqli --with-mysqli \
@@ -74,6 +77,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
 #    && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
+        gmp \
         gd \
         intl \
         pcntl \
