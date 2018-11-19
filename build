@@ -2,4 +2,11 @@
 
 docker build -t dralec/php-alpine .
 
-docker push dralec/php-alpine
+if [ $? -eq 0 ]
+then
+  echo "Pushing"
+  docker push dralec/php-alpine
+else
+  echo "Could not build an image" >&2
+  exit 1
+fi

@@ -9,6 +9,6 @@ docker login
 ```
 
 
-```bash
+```bashp
 docker push dralec/php-alpine
 ```
