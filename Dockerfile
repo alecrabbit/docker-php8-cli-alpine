@@ -6,6 +6,7 @@ ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \
 ENV COMPOSER_VERSION 1.7.2
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ENV PHP_REDIS_VERSION 4.1.1
+ENV PHP_PTHREADS_VERSION 3.1.6
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -114,7 +115,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
-    # For phpunit coverage
+    # phpredis
     && git clone --branch ${PHP_REDIS_VERSION} https://github.com/phpredis/phpredis /tmp/phpredis \
         && cd /tmp/phpredis \
         && phpize  \
@@ -123,6 +124,15 @@ RUN apk add --no-cache --virtual .persistent-deps \
         && make install \
         && make test \
         && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
+    # # pthreads
+    # && git clone --branch ${PHP_PTHREADS_VERSION} https://github.com/krakjoe/pthreads.git /tmp/pthreads \
+    #     && cd /tmp/pthreads \
+    #     && phpize  \
+    #     && ./configure  \
+    #     && make  \
+    #     && make install \
+    #     && make test \
+    #     && echo 'extension=pthreads.so' > /usr/local/etc/php/conf.d/pthreads.ini \
     && apk del .build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
