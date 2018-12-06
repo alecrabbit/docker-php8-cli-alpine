@@ -1,4 +1,4 @@
-FROM php:7-fpm-alpine
+FROM dralec/7-zts-alpine
 LABEL Description="Application container"
 
 ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
@@ -124,15 +124,15 @@ RUN apk add --no-cache --virtual .persistent-deps \
         && make install \
         && make test \
         && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
-    # # pthreads
-    # && git clone --branch ${PHP_PTHREADS_VERSION} https://github.com/krakjoe/pthreads.git /tmp/pthreads \
-    #     && cd /tmp/pthreads \
-    #     && phpize  \
-    #     && ./configure  \
-    #     && make  \
-    #     && make install \
-    #     && make test \
-    #     && echo 'extension=pthreads.so' > /usr/local/etc/php/conf.d/pthreads.ini \
+    # pthreads
+    && git clone https://github.com/krakjoe/pthreads.git /tmp/pthreads \
+        && cd /tmp/pthreads \
+        && phpize  \
+        && ./configure  \
+        && make  \
+        && make install \
+        && make test \
+        && echo 'extension=pthreads.so' > /usr/local/etc/php/conf.d/pthreads.ini \
     && apk del .build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
@@ -158,13 +158,14 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && rm -rf /tmp/composer-setup.php /tmp/.htaccess \
     # show php info
     && php -v \
-    && php-fpm -v \
+    # && php-fpm -v \
     && php -m
 
 COPY ./aliases/* /scripts/aliases/
 COPY ./etc/bin/* /usr/local/bin/
 COPY ./keep-alive.sh /scripts/keep-alive.sh
 COPY ./fpm-entrypoint.sh /fpm-entrypoint.sh
+COPY ./fpm-command.sh /fpm-command.sh
 COPY ./etc/php/php-dev.ini /usr/local/etc/php/php.ini
 COPY ./etc/php/php-fpm.conf /usr/local/etc/php-fpm.conf
 
