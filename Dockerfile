@@ -1,4 +1,4 @@
-FROM dralec/7-zts-alpine
+FROM php:7.2-fpm-alpine
 LABEL Description="Application container"
 
 ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
@@ -6,7 +6,6 @@ ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \
 ENV COMPOSER_VERSION 1.7.2
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ENV PHP_REDIS_VERSION 4.1.1
-ENV PHP_PTHREADS_VERSION 3.1.6
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -124,15 +123,6 @@ RUN apk add --no-cache --virtual .persistent-deps \
         && make install \
         && make test \
         && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
-    # pthreads
-    && git clone https://github.com/krakjoe/pthreads.git /tmp/pthreads \
-        && cd /tmp/pthreads \
-        && phpize  \
-        && ./configure  \
-        && make  \
-        && make install \
-        && make test \
-        && echo 'extension=pthreads.so' > /usr/local/etc/php/conf.d/pthreads.ini \
     && apk del .build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
@@ -158,7 +148,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && rm -rf /tmp/composer-setup.php /tmp/.htaccess \
     # show php info
     && php -v \
-    # && php-fpm -v \
+    && php-fpm -v \
     && php -m
 
 COPY ./aliases/* /scripts/aliases/

@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-docker build -t dralec/php-alpine .
+IMAGE="dralec/${PWD##*/}"
+docker build -t "${IMAGE}" .
 
 if [ $? -eq 0 ]
 then
   echo "Pushing"
-  docker push dralec/php-alpine
+  docker push "${IMAGE}"
 else
   echo "Could not build an image" >&2
   exit 1
