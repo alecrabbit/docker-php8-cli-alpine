@@ -1,7 +1,23 @@
 #!/usr/bin/env bash
+FORCE=0
+echo "$@" # for debug
+for arg
+do
+    case "$arg" in
+        --force)
+            FORCE=1
+            ;;
+    esac
+done
 
 IMAGE="dralec/${PWD##*/}"
-docker build -t "${IMAGE}" .
+echo "Building image: ${IMAGE}"
+if [[ ${FORCE} == 0 ]]
+then
+  docker build -t "${IMAGE}" .
+else
+  docker build --no-cache -t "${IMAGE}" .
+fi
 
 if [ $? -eq 0 ]
 then
