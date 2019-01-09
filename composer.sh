@@ -14,7 +14,7 @@ else
     echo "Executing: $1/composer-setup.php"
 fi
 
-php $1/composer-setup.php --quiet --no-ansi --install-dir=/usr/bin --filename=composer --version=$2
+php $1/composer-setup.php --quiet --no-ansi --install-dir=/usr/bin --filename=composer
 RESULT=$?
 rm $1/composer-setup.php
 exit ${RESULT}

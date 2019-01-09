@@ -3,7 +3,6 @@ LABEL Description="Application container"
 
 ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
 
-ENV COMPOSER_VERSION 1.7.2
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ENV PHP_REDIS_VERSION 4.1.1
 ENV PHP_PTHREADS_VERSION master
@@ -149,7 +148,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && rm -f /usr/local/etc/php-fpm.d/* \
     && mkdir -p "$COMPOSER_HOME" \
     # install composer
-    && /composer.sh "$COMPOSER_HOME" "$COMPOSER_VERSION" \
+    && /composer.sh "$COMPOSER_HOME" \
     && rm -f /composer.sh \
     && composer --ansi --version --no-interaction \
     && composer --no-interaction global require 'hirak/prestissimo' \
