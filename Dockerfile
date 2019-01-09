@@ -1,4 +1,3 @@
-FROM php:7.2-fpm-alpine
 FROM php:7.2-zts-alpine
 LABEL Description="Application container"
 
