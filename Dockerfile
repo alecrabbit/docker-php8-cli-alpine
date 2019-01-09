@@ -12,6 +12,8 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 ENV PATH /scripts:/scripts/aliases:$PATH
 
+ADD composer.sh /
+
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
     autoconf \
@@ -147,10 +149,12 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && rm -f /usr/local/etc/php-fpm.d/* \
     && mkdir -p "$COMPOSER_HOME" \
     # install composer
-    && php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
-    && php -r "if(hash_file('SHA384','/tmp/composer-setup.php')==='93b54496392c062774670ac18b134c3b3a95e5a5e5c8'.\
-    'f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8'){echo 'Verified';}else{echo 'Installer corrupt';unlink('/tmp/composer-setup.php');} echo PHP_EOL;" \
-    && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/bin --filename=composer --version=$COMPOSER_VERSION \
+    && /composer.sh "$COMPOSER_HOME" "$COMPOSER_VERSION" \
+    && rm -f /composer.sh \
+    # && php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
+    # && php -r "if(hash_file('SHA384','/tmp/composer-setup.php')==='93b54496392c062774670ac18b134c3b3a95e5a5e5c8'.\
+    # 'f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8'){echo 'Verified';}else{echo 'Installer corrupt';unlink('/tmp/composer-setup.php');} echo PHP_EOL;" \
+    # && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/bin --filename=composer --version=$COMPOSER_VERSION \
     && composer --ansi --version --no-interaction \
     && composer --no-interaction global require 'hirak/prestissimo' \
     && composer --no-interaction global require 'localheinz/composer-normalize' \

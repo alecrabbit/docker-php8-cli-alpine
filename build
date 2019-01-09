@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 FORCE=0
-echo "$@" # for debug
+# echo "$@" # for debug
 for arg
 do
     case "$arg" in
