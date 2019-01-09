@@ -158,7 +158,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
     && rm -rf /tmp/composer-setup.php /tmp/.htaccess \
     # show php info
     && php -v \
-    && php-fpm -v \
+    # && php-fpm -v \
     && php -m
 
 COPY ./aliases/* /scripts/aliases/
