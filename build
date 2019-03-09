@@ -12,7 +12,6 @@ done
 
 IMAGE="dralec/${PWD##*/}"
 echo "Building image: ${IMAGE}"
-echo ""
 if [[ ${FORCE} == 0 ]]
 then
   docker build -t "${IMAGE}" .
@@ -25,7 +24,9 @@ then
   echo "Pushing"
   docker push "${IMAGE}"
 else
-  echo ""
   echo "Could not build an image" >&2
+  notify-send "🐳 Docker" "'${IMAGE}' build ERROR" -u critical
   exit 1
 fi
+
+notify-send "🐳 Docker" "'${IMAGE}' built successfully."
