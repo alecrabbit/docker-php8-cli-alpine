@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 FORCE=0
+PUSH=1
 # echo "$@" # for debug
 for arg
 do
     case "$arg" in
         --force)
             FORCE=1
+            ;;
+        --no-push)
+            PUSH=0
             ;;
     esac
 done
@@ -21,8 +25,11 @@ fi
 
 if [ $? -eq 0 ]
 then
-  echo "Pushing"
-  docker push "${IMAGE}"
+  if [[ ${PUSH} == 1 ]]
+  then
+    echo "Pushing"
+    docker push "${IMAGE}"
+  fi
 else
   echo "Could not build an image" >&2
   notify-send "🐳 Docker" "'${IMAGE}' build ERROR" -u critical
