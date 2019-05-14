@@ -14,7 +14,7 @@ if [ -e $FILE ]
 then
   NEWPATH=$FILE
 else
-  SEARCH_PATH="${SEARCH_PATH} ${FILE}"
+  SEARCH_PATH="${SEARCH_PATH}\n${FILE}"
 fi
 
 FILE="$TMP_DIR/vendor/bin/${1}";
@@ -22,12 +22,13 @@ if [ -e $FILE ]
 then
   NEWPATH=$FILE
 else
-  SEARCH_PATH="${SEARCH_PATH} ${FILE}"
+  SEARCH_PATH="${SEARCH_PATH}\n${FILE}"
 fi
 
 if [ -z $NEWPATH ]
 then
-  echo "It seems like ${1} is not installed. Search path was: ${SEARCH_PATH}"
+  echo -e "It seems like '${1}' is not installed(Wrong container?).\nSearch paths was: ${SEARCH_PATH}"
+  exit 1
 else
   shift
   ${NEWPATH} "$@"
