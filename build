@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 FORCE=0
-PUSH=1
+PUSH=0
 # echo "$@" # for debug
 for arg
 do
@@ -8,8 +8,8 @@ do
         --force)
             FORCE=1
             ;;
-        --no-push)
-            PUSH=0
+        --push)
+            PUSH=1
             ;;
     esac
 done
