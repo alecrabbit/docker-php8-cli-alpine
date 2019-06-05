@@ -25,15 +25,17 @@ fi
 
 if [ $? -eq 0 ]
 then
+  notify-send "🐳 Docker" "Built '${IMAGE}' successfully."
   if [[ ${PUSH} == 1 ]]
   then
     echo "Pushing"
     docker push "${IMAGE}"
+    if [ $? -eq  0 ]; then
+      notify-send "🐳 Docker" "Pushed '${IMAGE}' successfully."
+    fi
   fi
 else
   echo "Could not build an image" >&2
   notify-send "🐳 Docker" "'${IMAGE}' build ERROR" -u critical
   exit 1
 fi
-
-notify-send "🐳 Docker" "'${IMAGE}' built successfully."

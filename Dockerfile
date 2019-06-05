@@ -53,6 +53,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
     # for imagick extension
     imagemagick-dev \
     # etc
+    graphviz \
+    ttf-freefont \
     bash nano \
     git \
     unzip \
