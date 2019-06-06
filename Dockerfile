@@ -4,7 +4,7 @@ LABEL Description="Application container"
 ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
 
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
-ENV PHP_REDIS_VERSION 4.1.1
+ENV PHP_REDIS_VERSION 4.3.0
 ENV PHP_PTHREADS_VERSION v3.2.0
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
