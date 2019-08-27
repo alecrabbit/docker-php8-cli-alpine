@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+NAME=$(basename -- "$0")
+# echo "${NAME}" "$@"
+/usr/local/bin/common.sh "${NAME}" "$@"
