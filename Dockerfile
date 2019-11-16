@@ -4,8 +4,7 @@ LABEL Description="Application container"
 ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
 
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
-ENV PHP_REDIS_VERSION 5.0.2
-ENV PHP_PTHREADS_VERSION v3.2.0
+ENV PHP_REDIS_VERSION 5.1.1
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -112,8 +111,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
 #opcache.fast_shutdown=1\n\
 #opcache.enable_cli=1\n\
 #opcache.enable=1\n" > /usr/local/etc/php/conf.d/opcache.ini \
-    && pecl install trader \
-    && docker-php-ext-enable trader \
+    # && pecl install trader \
+    # && docker-php-ext-enable trader \
     && pecl install event \
     && docker-php-ext-enable event  \
     && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
@@ -128,15 +127,6 @@ RUN apk add --no-cache --virtual .persistent-deps \
         && make install \
         && make test \
         && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
-    # pthreads
-    # && git clone --branch ${PHP_PTHREADS_VERSION} https://github.com/krakjoe/pthreads.git /tmp/pthreads \
-    #     && cd /tmp/pthreads \
-    #     && phpize  \
-    #     && ./configure  \
-    #     && make  \
-    #     && make install \
-    #     && make test \
-    #     && echo 'extension=pthreads.so' > /usr/local/etc/php/conf.d/pthreads.ini \
     && apk del .build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
