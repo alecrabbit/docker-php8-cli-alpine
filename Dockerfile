@@ -113,18 +113,6 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
       --with-jpeg-dir=/usr \
       --with-webp-dir=/usr \
       --with-xpm-dir=/usr \
-    && docker-php-ext-configure bcmath --enable-bcmath \
-    && docker-php-ext-configure gmp \
-    # --enable-gmp \
-    && docker-php-ext-configure intl --enable-intl \
-    && docker-php-ext-configure pcntl --enable-pcntl \
-    && docker-php-ext-configure mysqli --with-mysqli \
-    && docker-php-ext-configure pdo_mysql --with-pdo-mysql \
-    && docker-php-ext-configure pdo_pgsql  \
-    # --with-pgsql \
-    && docker-php-ext-configure mbstring --enable-mbstring \
-    && docker-php-ext-configure soap --enable-soap \
-    && docker-php-ext-configure zip --enable-zip \
 #    && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTENSIONS} \
 #        opcache \
@@ -137,14 +125,10 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
 #opcache.enable=1\n" > /usr/local/etc/php/conf.d/opcache.ini \
     # && pecl install trader \
     # && docker-php-ext-enable trader \
-    && pecl install event \
-    && docker-php-ext-enable event  \
-    && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick \
     && \
-    pecl install -o -f redis-${REDIS_VERSION} \
-    && docker-php-ext-enable redis \
+    pecl install -o -f redis-${REDIS_VERSION} event imagick \
+    && docker-php-ext-enable ${PHP_EXTENSIONS} redis imagick event \
+    && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && apk del --no-cache .php-build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
