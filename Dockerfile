@@ -5,7 +5,7 @@ FROM php:${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
 LABEL Description="Application container"
 
-# ENV PS1='\[\033[1;32m\]🐳 \[\033[1;36m\][\u\033[38;05;224m@\h\[\033[1;36m\]] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
+ENV PS1='🐳 \[\033[1;36m\]\D{%F} \t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
 
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ARG REDIS_VERSION=5.2.1
@@ -41,8 +41,22 @@ ENV PATH /scripts:/scripts/aliases:$PATH
 
 COPY composer.sh /
 
-# persistent / runtime deps
-ENV PHPIZE_DEPS \
+ARG UTILS="\
+    bash \
+    nano \
+    curl \
+    git \
+    unzip \
+    graphviz \
+    netcat-openbsd \
+    mysql-client \
+    openssh \
+    postgresql-client \
+    procps \
+    shadow \
+    coreutils"
+
+ARG PHP_BUILD_DEPS="\
     autoconf \
     cmake \
     file \
@@ -51,52 +65,54 @@ ENV PHPIZE_DEPS \
     libc-dev \
     pcre-dev \
     make \
+    freetype-dev \
+    gmp-dev \
+    icu-dev \
     pkgconf \
     re2c \
-    # for GD
+    libxml2-dev \
+    postgresql-dev \
     freetype-dev \
     libpng-dev  \
-    libjpeg-turbo-dev \
-    libxslt-dev
-
-RUN apk add --no-cache --virtual .persistent-deps \
-    # for intl extension
-    icu-dev \
-    # for postgres
-    postgresql-dev \
-    # for soap
-    libxml2-dev \
-    # for GD
-    freetype \
-    libpng \
-    libjpeg-turbo \
-    # for bz2 extension
-    bzip2-dev \
-    # for intl extension
-    libintl gettext-dev libxslt \
-    # for event extension
     libevent-dev \
-    # for gmp
-    gmp gmp-dev \
-    # for imagick extension
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    libxpm-dev \
     imagemagick-dev \
-    # etc
-    graphviz \
-    ttf-freefont \
-    bash nano \
-    git \
-    unzip \
+    bzip2-dev \
     libzip-dev \
+    gettext-dev \
+    libxslt-dev"
+
+ARG PHP_RUN_DEPS="\
+    icu-libs \
+    libbz2 \
+    libxslt \
+    libpng \
+    freetype \
+    libxpm \
+    libwebp \
+    imagemagick \
+    libxml2 \
+    libevent \
+    libintl \
+    ttf-freefont \
+    libjpeg-turbo \
+    libzip \
+    gmp"
+
+RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
     && set -xe \
     # workaround for rabbitmq linking issue
     && ln -s /usr/lib /usr/local/lib64 \
-    && apk add --no-cache --virtual .build-deps \
-        $PHPIZE_DEPS \
+    && \
+    apk add --no-cache --virtual .php-build-deps ${PHP_BUILD_DEPS} \
     && docker-php-ext-configure gd \
-        --with-gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-png-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ \
+      --disable-gd-jis-conv \
+      --with-freetype=/usr \
+      --with-jpeg=/usr \
+      --with-webp=/usr \
+      --with-xpm=/usr \
     && docker-php-ext-configure bcmath --enable-bcmath \
     && docker-php-ext-configure gmp \
     # --enable-gmp \
@@ -135,7 +151,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
         && make install \
         && make test \
         && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
-    && apk del .build-deps \
+    && apk del --no-cache .php-build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
     && mkdir /app \
