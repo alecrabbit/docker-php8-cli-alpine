@@ -109,10 +109,10 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
     apk add --no-cache --virtual .php-build-deps ${PHP_BUILD_DEPS} \
     && docker-php-ext-configure gd \
       --disable-gd-jis-conv \
-      --with-freetype=/usr \
-      --with-jpeg=/usr \
-      --with-webp=/usr \
-      --with-xpm=/usr \
+      --with-freetype-dir=/usr \
+      --with-jpeg-dir=/usr \
+      --with-webp-dir=/usr \
+      --with-xpm-dir=/usr \
     && docker-php-ext-configure bcmath --enable-bcmath \
     && docker-php-ext-configure gmp \
     # --enable-gmp \
@@ -142,15 +142,9 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
     && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
-    # phpredis
-    && git clone --branch ${REDIS_VERSION} https://github.com/phpredis/phpredis /tmp/phpredis \
-        && cd /tmp/phpredis \
-        && phpize  \
-        && ./configure  \
-        && make  \
-        && make install \
-        && make test \
-        && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
+    && \
+    pecl install -o -f redis-${REDIS_VERSION} \
+    && docker-php-ext-enable redis \
     && apk del --no-cache .php-build-deps \
     && rm -rf /tmp/* \
     && rm -rf /app \
@@ -168,13 +162,11 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
     && /composer.sh "$COMPOSER_HOME" \
     && rm -f /composer.sh \
     && composer --ansi --version --no-interaction \
-    && composer --no-interaction global require 'hirak/prestissimo' \
-    && composer --no-interaction global require 'localheinz/composer-normalize' \
+    && composer --no-interaction global --prefer-stable require 'hirak/prestissimo' \
+    && composer --no-interaction global --prefer-stable require 'ergebnis/composer-normalize' \
     && composer clear-cache \
     && rm -rf /tmp/composer-setup.php /tmp/.htaccess /tmp/cache \
-    # show php info
     && php -v \
-    # && php-fpm -v \
     && php -m
 
 
