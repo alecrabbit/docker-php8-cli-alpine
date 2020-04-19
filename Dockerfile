@@ -113,21 +113,11 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
       --with-jpeg-dir=/usr \
       --with-webp-dir=/usr \
       --with-xpm-dir=/usr \
-#    && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTENSIONS} \
-#        opcache \
-#    && echo -e "opcache.memory_consumption=128\n\
-#opcache.interned_strings_buffer=8\n\
-#opcache.max_accelerated_files=4000\n\
-#opcache.revalidate_freq=60\n\
-#opcache.fast_shutdown=1\n\
-#opcache.enable_cli=1\n\
-#opcache.enable=1\n" > /usr/local/etc/php/conf.d/opcache.ini \
-    # && pecl install trader \
-    # && docker-php-ext-enable trader \
     && \
     pecl install -o -f redis-${REDIS_VERSION} event imagick \
     && docker-php-ext-enable ${PHP_EXTENSIONS} redis imagick event \
+    # Rename docker-php-ext-event.ini -> docker-php-ext-zz-event.ini to load it after docker-php-ext-sockets.ini https://github.com/docker-library/php/issues/857
     && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && apk del --no-cache .php-build-deps \
     && rm -rf /tmp/* \
