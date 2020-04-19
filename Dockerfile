@@ -5,7 +5,7 @@ FROM php:${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
 LABEL Description="Application container"
 
-ENV PS1='🐳 \[\033[1;36m\]\D{%F} \t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
+ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;31m\]\t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
 
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ARG REDIS_VERSION=5.2.1
@@ -120,18 +120,20 @@ RUN apk add --no-cache ${UTILS} ${PHP_RUN_DEPS}\
     # Rename docker-php-ext-event.ini -> docker-php-ext-zz-event.ini to load it after docker-php-ext-sockets.ini https://github.com/docker-library/php/issues/857
     && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && apk del --no-cache .php-build-deps \
-    && rm -rf /tmp/* \
-    && rm -rf /app \
-    && mkdir /app \
-    && rm -rf /scripts \
-    && mkdir /scripts \
-    && mkdir -p /scripts/aliases \
-    && rm -rf /home/user \
-    && mkdir /home/user \
+    && rm -rf \
+      /tmp/* \
+      /app \
+      /scripts \
+      /home/user \
+    && rm -f \
+      /docker-entrypoint.sh \
+      /usr/local/etc/php-fpm.d/* \
+    && mkdir -p \
+      /scripts/aliases \
+      /app \
+      /home/user \
+      "$COMPOSER_HOME" \
     && chmod 777 /home/user \
-    && rm -f /docker-entrypoint.sh \
-    && rm -f /usr/local/etc/php-fpm.d/* \
-    && mkdir -p "$COMPOSER_HOME" \
     # install composer
     && /composer.sh "$COMPOSER_HOME" \
     && rm -f /composer.sh \
