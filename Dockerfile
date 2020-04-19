@@ -5,7 +5,7 @@ FROM php:${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
 
 LABEL Description="Application container"
 
-ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;31m\]\t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
+ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;33m\]\t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
 
 ## Looked here: <https://github.com/prooph/docker-files/blob/master/php/7.2-cli>
 ARG REDIS_VERSION=5.2.1
