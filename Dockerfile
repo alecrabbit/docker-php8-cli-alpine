@@ -39,12 +39,13 @@ ARG UTILS="\
     nano \
     curl \
     git \
-    openssh"
-    # openssh \"
-    # netcat-openbsd \
-    # procps \
-    # shadow \
-    # coreutils"
+    netcat-openbsd \
+    mysql-client \
+    openssh \
+    postgresql-client \
+    procps \
+    shadow \
+    coreutils"
 
 ARG PHP_BUILD_DEPS="\
     autoconf \
@@ -65,6 +66,7 @@ ARG PHP_BUILD_DEPS="\
     libpng-dev  \
     libevent-dev \
     libjpeg-turbo-dev \
+    postgresql-dev \
     libwebp-dev \
     libxpm-dev \
     imagemagick-dev \
@@ -83,7 +85,6 @@ ARG PHP_RUN_DEPS="\
     freetype \
     libxpm \
     libwebp \
-    postgresql-dev \
     imagemagick \
     libxml2 \
     libevent \
