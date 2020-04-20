@@ -6,7 +6,7 @@ then
 fi
 
 APP_DIR="${APP_DIR:-/var/www}";
-TMP_DIR="${TMP_DIR:-/tmp}";
+COMPOSER_HOME="${COMPOSER_HOME:-/tmp/composer}";
 SEARCH_PATH=''
 
 FILE="$APP_DIR/vendor/bin/${1}";
@@ -17,7 +17,7 @@ else
   SEARCH_PATH="${SEARCH_PATH}\n${FILE}"
 fi
 
-FILE="$TMP_DIR/vendor/bin/${1}";
+FILE="$COMPOSER_HOME/vendor/bin/${1}";
 if [ -e $FILE ]
 then
   NEWPATH=$FILE

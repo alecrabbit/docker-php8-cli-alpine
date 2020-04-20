@@ -11,6 +11,8 @@ ARG REDIS_VERSION=5.2.1
 ARG EVENT_VERSION=2.5.4
 ARG IMAGICK_VERSION=3.4.4
 
+ARG COMPOSER_HOME=/tmp/composer
+
 # Note: extensions redis, event & imagick installed separately see below
 
 ARG PHP_EXTENSIONS="\
@@ -95,7 +97,7 @@ ARG PHP_RUN_DEPS="\
     gmp"
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ARG COMPOSER_HOME=/tmp/composer
+ENV COMPOSER_HOME ${COMPOSER_HOME}
 ENV PATH /scripts:/scripts/aliases:$PATH
 
 COPY composer.sh /
@@ -136,7 +138,7 @@ RUN set -eux \
       /app \
       /home/user \
       ${COMPOSER_HOME} \
-    && chmod 777 /home/user \
+    && chmod 777 /home/user ${COMPOSER_HOME}\
     # install composer
     && /composer.sh ${COMPOSER_HOME} \
     && rm -f /composer.sh \
@@ -144,7 +146,7 @@ RUN set -eux \
     && composer --no-interaction global --prefer-stable require 'hirak/prestissimo' \
     && composer --no-interaction global --prefer-stable require 'ergebnis/composer-normalize' \
     && composer clear-cache \
-    && rm -rf ${COMPOSER_HOME}/.htaccess ${COMPOSER_HOME}/cache \
+    && rm -rf ${COMPOSER_HOME}/.htaccess ${COMPOSER_HOME}/cache /tmp/pear \
     && php -v \
     && php -m
 
