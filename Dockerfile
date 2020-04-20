@@ -95,7 +95,7 @@ ARG PHP_RUN_DEPS="\
     gmp"
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /tmp/composer
+ARG COMPOSER_HOME=/tmp/composer
 ENV PATH /scripts:/scripts/aliases:$PATH
 
 COPY composer.sh /
