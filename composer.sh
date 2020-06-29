@@ -18,15 +18,3 @@ php $1/composer-setup.php --quiet --no-ansi --install-dir=/usr/bin --filename=co
 RESULT=$?
 rm $1/composer-setup.php
 exit ${RESULT}
-
-# if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
-# then
-#     >&2 echo 'ERROR: Invalid installer signature'
-#     rm $1/composer-setup.php
-#     exit 1
-# fi
-#
-# php $1/composer-setup.php --quiet
-# RESULT=$?
-# rm $1/composer-setup.php
-# exit $RESULT
