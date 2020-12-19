@@ -67,6 +67,7 @@ ARG PHP_BUILD_DEPS="\
     freetype-dev \
     libpng-dev  \
     libevent-dev \
+    oniguruma-dev \
     libjpeg-turbo-dev \
     postgresql-dev \
     libwebp-dev \
