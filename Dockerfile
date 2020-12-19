@@ -1,14 +1,14 @@
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=8.0
 ARG ALPINE_VERSION=3.12
 
-FROM php:${PHP_VERSION}-zts-alpine${ALPINE_VERSION}
+FROM php:${PHP_VERSION}-cli-alpine${ALPINE_VERSION}
 
 LABEL Description="DEV Application container"
 
 ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;33m\]\t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
 
-ARG REDIS_VERSION=5.2.1
-ARG EVENT_VERSION=2.5.4
+ARG REDIS_VERSION=5.3.2
+ARG EVENT_VERSION=2.5.7
 ARG IMAGICK_VERSION=3.4.4
 
 ARG COMPOSER_HOME=/tmp/composer
@@ -111,10 +111,10 @@ RUN set -eux \
     apk add --no-cache --virtual .php-build-deps ${PHP_BUILD_DEPS} \
     && docker-php-ext-configure gd \
       --disable-gd-jis-conv \
-      --with-freetype-dir=/usr \
-      --with-jpeg-dir=/usr \
-      --with-webp-dir=/usr \
-      --with-xpm-dir=/usr \
+      --with-freetype=/usr \
+      --with-jpeg=/usr \
+      --with-webp=/usr \
+      --with-xpm=/usr \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTENSIONS} \
     && \
     pecl install -o -f \
