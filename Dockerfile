@@ -8,7 +8,7 @@ LABEL Description="DEV Application container"
 ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;33m\]\t \[\033[0;32m\][\[\033[1;34m\]\u\[\033[1;97m\]@\[\033[1;93m\]\h\[\033[0;32m\]] \[\033[0;95m\]\w \[\033[1;36m\]#\[\033[0m\] '
 
 ARG REDIS_VERSION=5.3.2
-ARG EVENT_VERSION=2.5.7
+ARG EVENT_VERSION=3.0.2
 ARG IMAGICK_VERSION=3.4.4
 
 ARG COMPOSER_HOME=/tmp/composer
