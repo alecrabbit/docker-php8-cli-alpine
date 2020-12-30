@@ -9,6 +9,7 @@ ENV PS1='🐳 \[\033[1;36m\]\D{%F} \[\033[0;33m\]\t \[\033[0;32m\][\[\033[1;34m\
 
 ARG REDIS_VERSION=5.3.2
 ARG EVENT_VERSION=3.0.2
+# Imagick is not compatible with php8 yet(as of 2020-12-19)
 ARG IMAGICK_VERSION=3.4.4
 
 ARG COMPOSER_HOME=/tmp/composer
@@ -120,11 +121,12 @@ RUN set -eux \
     && \
     pecl install -o -f \
       event-${EVENT_VERSION} \
-      imagick-${IMAGICK_VERSION} \
+#      imagick-${IMAGICK_VERSION} \
       redis-${REDIS_VERSION} \
-    && docker-php-ext-enable ${PHP_EXTENSIONS} event imagick redis \
+#    && docker-php-ext-enable ${PHP_EXTENSIONS} event imagick redis \
+#    && docker-php-ext-enable ${PHP_EXTENSIONS} event redis \
     # Rename docker-php-ext-event.ini -> docker-php-ext-zz-event.ini to load it after docker-php-ext-sockets.ini https://github.com/docker-library/php/issues/857
-    && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
+    # && mv /usr/local/etc/php/conf.d/docker-php-ext-event.ini /usr/local/etc/php/conf.d/docker-php-ext-zz-event.ini \
     && apk del --no-cache .php-build-deps \
     && rm -rf \
       /tmp/* \
@@ -144,7 +146,7 @@ RUN set -eux \
     && /composer.sh ${COMPOSER_HOME} \
     && rm -f /composer.sh \
     && composer --ansi --version --no-interaction \
-    && composer --no-interaction global --prefer-stable require 'hirak/prestissimo' \
+#    && composer --no-interaction global --prefer-stable require 'hirak/prestissimo' \
     && composer --no-interaction global --prefer-stable require 'ergebnis/composer-normalize' \
     && composer clear-cache \
     && rm -rf ${COMPOSER_HOME}/.htaccess ${COMPOSER_HOME}/cache /tmp/pear \
